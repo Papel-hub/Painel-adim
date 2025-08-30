@@ -1,4 +1,4 @@
-import { dirname } from "path";
+nextjs-commerce-main/.env.examplenextjs-commerce-main/.env.exampleimport { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 
