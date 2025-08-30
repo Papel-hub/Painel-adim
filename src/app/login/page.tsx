@@ -20,8 +20,6 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
   const router = useRouter();
 
   // Recuperar e-mail salvo
@@ -109,7 +107,7 @@ export default function LoginPage() {
         <div className="relative">
           <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={20} />
           <input
-            type={showPassword ? "text" : "password"}
+            type="password"
             id="senha"
             placeholder="Senha"
             value={password}
@@ -118,13 +116,6 @@ export default function LoginPage() {
             required
             className="w-full p-3 pl-12 pr-12 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
-          </button>
         </div>
 
         {/* Lembrar de mim + Esqueceu a senha */}
