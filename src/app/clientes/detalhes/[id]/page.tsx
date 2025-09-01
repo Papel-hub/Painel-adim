@@ -86,11 +86,13 @@ export default function DetalhesCliente() {
         })) || [];
 
         // Último pedido para informações de pagamento
-        const ultimoPedido = data.ultimoPedido?.items?.[0];
+        const ultimoPedido = data.historicoCompras?.[data.historicoCompras.length - 1];
+        const ultimoItem = ultimoPedido?.items?.[0];
+
         const pagamento: Pagamento = {
-          metodo: ultimoPedido?.paymentMethod || "—",
-          sstatus: data.status || "—",
-          total: ultimoPedido?.price || 0,
+          metodo: ultimoItem?.paymentMethod || "—",
+          sstatus: ultimoPedido?.status || "—",
+          total: ultimoItem?.price || 0,
         };
 
         setCliente({
