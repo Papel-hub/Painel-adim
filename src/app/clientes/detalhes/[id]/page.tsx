@@ -18,17 +18,18 @@ interface Compra {
 
 interface Pagamento {
   metodo?: string;
-  status?: string;
+  sstatus?: string;
   total?: number;
 }
 
 interface Cliente {
   nome: string;
   email?: string;
-  telefone?: string;
-  endereco?: string;
-  ultimaCompra?: string;
-  jaComprou?: boolean;
+  celular?: string;
+  cpf?: string;
+  createdAt?: string;
+  status?: string;
+  tipoPessoa?: string;
   compras?: Compra[];
   pagamento?: Pagamento;
 }
@@ -124,21 +125,24 @@ export default function DetalhesCliente() {
 
         <div className="space-y-5 text-slate-700">
           <p className="flex items-start gap-3">
+            <FaUser className="text-blue-500 mt-1 flex-shrink-0" /> <strong>Email:</strong> {cliente.tipoPessoa || "—"}
+          </p>
+          <p className="flex items-start gap-3">
             <FaEnvelope className="text-blue-500 mt-1 flex-shrink-0" /> <strong>Email:</strong> {cliente.email || "—"}
           </p>
           <p className="flex items-start gap-3">
-            <FaPhone className="text-green-500 mt-1 flex-shrink-0" /> <strong>Telefone:</strong> {cliente.telefone || "—"}
+            <FaPhone className="text-green-500 mt-1 flex-shrink-0" /> <strong>Telefone:</strong> {cliente.celular || "—"}
           </p>
           <p className="flex items-start gap-3">
-            <FaMapMarkerAlt className="text-red-500 mt-1 flex-shrink-0" /> <strong>Endereço:</strong> {cliente.endereco || "—"}
+            <FaMapMarkerAlt className="text-red-500 mt-1 flex-shrink-0" /> <strong>Cpf:</strong> {cliente.cpf || "—"}
           </p>
           <p className="flex items-start gap-3">
-            <FaBox className="text-purple-500 mt-1 flex-shrink-0" /> <strong>Última Compra:</strong> {cliente.ultimaCompra || "—"}
+            <FaBox className="text-purple-500 mt-1 flex-shrink-0" /> <strong>Última Compra:</strong> {cliente.createdAt || "—"}
           </p>
           <p className="flex items-start gap-3">
             <FaBox className="text-orange-500 mt-1 flex-shrink-0" /> <strong>Status:</strong>{" "}
-            <span className={`ml-1 px-2 py-1 rounded-full font-medium text-sm ${cliente.jaComprou ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-              {cliente.jaComprou ? "✅ Comprou" : "❌ Não comprou"}
+            <span className={`ml-1 px-2 py-1 rounded-full font-medium text-sm ${cliente.status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+              {cliente.status ? "Comprou" : "suspenso"}
             </span>
           </p>
         </div>
@@ -184,7 +188,7 @@ export default function DetalhesCliente() {
         </h3>
         <div className="space-y-3 text-slate-700">
           <p><strong>Forma de Pagamento:</strong> {cliente.pagamento?.metodo || "—"}</p>
-          <p><strong>Status:</strong> {cliente.pagamento?.status || "—"}</p>
+          <p><strong>Status:</strong> {cliente.pagamento?.sstatus || "—"}</p>
           <p className="font-semibold text-lg"><strong>Valor Total Gasto:</strong> {totalPago}</p>
         </div>
 
