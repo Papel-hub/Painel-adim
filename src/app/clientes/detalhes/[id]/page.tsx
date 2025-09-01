@@ -12,7 +12,7 @@ import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBox, FaCreditCard, FaArr
 interface Compra {
   produto: string;
   qtd: number | string;
-  valor: string;
+  valor: number;
   data: string;
 }
 
@@ -75,7 +75,35 @@ export default function DetalhesCliente() {
           return;
         }
 
-        setCliente(docSnap.data() as Cliente);
+        const data = docSnap.data() as any;
+
+        // Mapear histórico de compras para o formato esperado
+        const compras: Compra[] = data.historicoCompras?.map((pedido: any) => ({
+          produto: pedido.items[0]?.title || "—",
+          qtd: pedido.items[0]?.quantity || 0,
+          valor: pedido.items[0]?.price || 0,
+          data: pedido.createdAt || "—",
+        })) || [];
+
+        // Último pedido para informações de pagamento
+        const ultimoPedido = data.ultimoPedido?.items?.[0];
+        const pagamento: Pagamento = {
+          metodo: ultimoPedido?.paymentMethod || "—",
+          sstatus: data.status || "—",
+          total: ultimoPedido?.price || 0,
+        };
+
+        setCliente({
+          nome: data.nome || "—",
+          email: data.email || "—",
+          celular: data.celular || "—",
+          cpf: data.cpf || "—",
+          createdAt: data.createdAt || "—",
+          status: data.status || "—",
+          tipoPessoa: data.tipoPessoa || "—",
+          compras,
+          pagamento,
+        });
       } catch (error) {
         console.error("Erro ao carregar cliente:", error);
         alert("Erro ao carregar os detalhes do cliente.");
@@ -125,7 +153,7 @@ export default function DetalhesCliente() {
 
         <div className="space-y-5 text-slate-700">
           <p className="flex items-start gap-3">
-            <FaUser className="text-blue-500 mt-1 flex-shrink-0" /> <strong>Email:</strong> {cliente.tipoPessoa || "—"}
+            <FaUser className="text-blue-500 mt-1 flex-shrink-0" /> <strong>Pessoa:</strong> {cliente.tipoPessoa || "—"}
           </p>
           <p className="flex items-start gap-3">
             <FaEnvelope className="text-blue-500 mt-1 flex-shrink-0" /> <strong>Email:</strong> {cliente.email || "—"}
@@ -134,15 +162,15 @@ export default function DetalhesCliente() {
             <FaPhone className="text-green-500 mt-1 flex-shrink-0" /> <strong>Telefone:</strong> {cliente.celular || "—"}
           </p>
           <p className="flex items-start gap-3">
-            <FaMapMarkerAlt className="text-red-500 mt-1 flex-shrink-0" /> <strong>Cpf:</strong> {cliente.cpf || "—"}
+            <FaMapMarkerAlt className="text-red-500 mt-1 flex-shrink-0" /> <strong>CPF:</strong> {cliente.cpf || "—"}
           </p>
           <p className="flex items-start gap-3">
-            <FaBox className="text-purple-500 mt-1 flex-shrink-0" /> <strong>Última Compra:</strong> {cliente.createdAt || "—"}
+            <FaBox className="text-purple-500 mt-1 flex-shrink-0" /> <strong>Criado em:</strong> {cliente.createdAt || "—"}
           </p>
           <p className="flex items-start gap-3">
             <FaBox className="text-orange-500 mt-1 flex-shrink-0" /> <strong>Status:</strong>{" "}
             <span className={`ml-1 px-2 py-1 rounded-full font-medium text-sm ${cliente.status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-              {cliente.status ? "Comprou" : "suspenso"}
+              {cliente.status ? "Comprou" : "Suspenso"}
             </span>
           </p>
         </div>
@@ -169,7 +197,9 @@ export default function DetalhesCliente() {
                   <tr key={idx} className="border-b border-slate-200 hover:bg-slate-50">
                     <td className="py-2 px-3">{compra.produto}</td>
                     <td className="py-2 px-3">{compra.qtd}</td>
-                    <td className="py-2 px-3">R$ {compra.valor}</td>
+                    <td className="py-2 px-3">
+                      {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(compra.valor)}
+                    </td>
                     <td className="py-2 px-3">{compra.data}</td>
                   </tr>
                 ))}
