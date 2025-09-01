@@ -12,15 +12,14 @@ import { FaUser, FaTrash, FaInfoCircle, FaPlus } from "react-icons/fa";
 interface Cliente {
   id: string;
   nome: string;
-  ultimaCompra?: string;
-  status: "Comprou" | "Não Comprou" | "Pendente";
+  createdAt?: string;
+  status: "Comprou" | "Pendente";
 }
 
 // Componente de badge de status
 const StatusBadge = ({ status }: { status: Cliente["status"] }) => {
   const colors = {
     "Comprou": "bg-green-100 text-green-800",
-    "Não Comprou": "bg-red-100 text-red-800",
     "Pendente": "bg-yellow-100 text-yellow-800",
   };
   return <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>{status}</span>;
@@ -40,8 +39,8 @@ export default function ClientesPage() {
           return {
             id: doc.id,
             nome: data.nome || "Sem nome",
-            ultimaCompra: data.ultimaCompra
-              ? (data.ultimaCompra.toDate ? data.ultimaCompra.toDate() : new Date(data.ultimaCompra))
+            createdAt: data.createdAt
+              ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt))
                   .toLocaleDateString("pt-BR")
               : "Nunca",
             status: (data.status as Cliente["status"]) || "Pendente",
@@ -131,7 +130,7 @@ export default function ClientesPage() {
               {clientes.map((cliente) => (
                 <tr key={cliente.id} className="border-b border-slate-200 hover:bg-slate-50 transition">
                   <td className="py-3 px-4 font-medium">{cliente.nome}</td>
-                  <td className="py-3 px-4">{cliente.ultimaCompra}</td>
+                  <td className="py-3 px-4">{cliente.createdAt}</td>
                   <td className="py-3 px-4">
                     <StatusBadge status={cliente.status} />
                   </td>
